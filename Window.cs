@@ -24,21 +24,26 @@ namespace WildOmissionServerConfigurator
         private void StartServerButton_Click(object sender, EventArgs e)
         {
             // Create ServerAdministrators.ini file
-            string[] AdministratorConfigLines = ["[/Script/DedicatedServer.ServerAdministrators]"];
-
             string[] AdminIDs = AdminIDTextBox.Text.Split(", ");
-            for (int i = 0; i<AdminIDs.Length; i++)
+            string[] AdministratorConfigLines = new string[AdminIDs.Length + 1];
+            for (int i = 0; i < AdministratorConfigLines.Length; i++)
             {
-                AdminIDs[i].Insert(0, "Administrators=");
-                AdministratorConfigLines.Append(AdminIDs[i]);            
+                if (i == 0)
+                {
+                    AdministratorConfigLines[i] = "[/Script/DedicatedServer.ServerAdministrators]";
+                    continue;
+                }
+
+                AdministratorConfigLines[i] = AdminIDs[i - 1].Insert(0, "Administrators=");
             }
 
+            // Write to that file
             Directory.CreateDirectory("WildOmission/Saved/Config/WindowsServer/");
             File.WriteAllLines("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini", AdministratorConfigLines);
 
             // Launch server executable with correct launch options
-            String LaunchString = String.Format("WildOmissionServer.exe -log -SteamServerName=\"{0}\" -Port={1}", ServerNameTextBox.Text, PortTextBox.Text);
-            Process.Start(LaunchString);
+            String LaunchArgumentsString = String.Format("-log -SteamServerName=\"{0}\" -Port={1}", ServerNameTextBox.Text, PortTextBox.Text);
+            Process.Start("WildOmissionServer.exe", LaunchArgumentsString);
         }
 
         private void CloseButton_Click(object sender, EventArgs e)
