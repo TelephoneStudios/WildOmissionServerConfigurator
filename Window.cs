@@ -12,26 +12,54 @@ namespace WildOmissionServerConfigurator
         private void Window_Load(object sender, EventArgs e)
         {
             // I absolutely hate the way this looks :(
-            File.Create("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
+            FileStream fs = File.Open("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini", FileMode.OpenOrCreate);
+            StreamReader sr = new StreamReader(fs);
 
-            string[] AdminIdConfig = File.ReadAllLines("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
-            for ( int i = 0; i < AdminIdConfig.Length; i++ )
+            String line;
+            try
             {
-                if (!AdminIdConfig[i].StartsWith("Administrators="))
+                while ((line = sr.ReadLine()) != null)
                 {
-                    continue;
-                }
+                    if (!line.StartsWith("Administrators="))
+                    {
+                        continue;
+                    }
 
-                if (AdminIDTextBox.Text == "")
-                {
-                    AdminIDTextBox.Text = AdminIdConfig[i].Remove(0, 15);
-                }
-                else
-                {
-                    string newId = AdminIdConfig[i].Remove(0, 15).Insert(0, ", ");
-                    AdminIDTextBox.Text.Insert(AdminIDTextBox.TextLength, newId);
+                    if (AdminIDTextBox.Text.Length == 0)
+                    {
+                        AdminIDTextBox.Text = line.Remove(0, 15);
+                    }
+                    else
+                    {
+                        string newId = line.Remove(0, 15).Insert(0, ", ");
+                        AdminIDTextBox.Text = AdminIDTextBox.Text.Insert(AdminIDTextBox.TextLength, newId);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally { fs.Close(); }
+
+            //string[] AdminIdConfig = File.ReadAllLines("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
+            //for ( int i = 0; i < AdminIdConfig.Length; i++ )
+            //{
+            //    if (!AdminIdConfig[i].StartsWith("Administrators="))
+            //    {
+            //        continue;
+            //    }
+
+            //    if (AdminIDTextBox.Text == "")
+            //    {
+            //        AdminIDTextBox.Text = AdminIdConfig[i].Remove(0, 15);
+            //    }
+            //    else
+            //    {
+            //        string newId = AdminIdConfig[i].Remove(0, 15).Insert(0, ", ");
+            //        AdminIDTextBox.Text.Insert(AdminIDTextBox.TextLength, newId);
+            //    }
+            //}
         }
 
         private void StartServerButton_Click(object sender, EventArgs e)
