@@ -35,7 +35,7 @@
             ServerPortLabel = new Label();
             AdminIDLabel = new Label();
             StartServerButton = new Button();
-            CancelButton = new Button();
+            CloseButton = new Button();
             SuspendLayout();
             // 
             // AdminIDTextBox
@@ -96,22 +96,22 @@
             StartServerButton.UseVisualStyleBackColor = true;
             StartServerButton.Click += StartServerButton_Click;
             // 
-            // CancelButton
+            // CloseButton
             // 
-            CancelButton.Location = new Point(15, 182);
-            CancelButton.Name = "CancelButton";
-            CancelButton.Size = new Size(773, 23);
-            CancelButton.TabIndex = 7;
-            CancelButton.Text = "Cancel";
-            CancelButton.UseVisualStyleBackColor = true;
-            CancelButton.Click += CancelButton_Click;
+            CloseButton.Location = new Point(15, 182);
+            CloseButton.Name = "CloseButton";
+            CloseButton.Size = new Size(773, 23);
+            CloseButton.TabIndex = 7;
+            CloseButton.Text = "Close";
+            CloseButton.UseVisualStyleBackColor = true;
+            CloseButton.Click += CloseButton_Click;
             // 
             // Window
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 220);
-            Controls.Add(CancelButton);
+            Controls.Add(CloseButton);
             Controls.Add(StartServerButton);
             Controls.Add(AdminIDLabel);
             Controls.Add(ServerPortLabel);
@@ -135,6 +135,6 @@
         private Label ServerPortLabel;
         private Label AdminIDLabel;
         private Button StartServerButton;
-        private Button CancelButton;
+        private Button CloseButton;
     }
 }
