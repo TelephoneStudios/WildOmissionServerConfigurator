@@ -11,14 +11,27 @@ namespace WildOmissionServerConfigurator
 
         private void Window_Load(object sender, EventArgs e)
         {
-            // TODO at some point have implement recall admin ability
-        //    File.Create("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
+            // I absolutely hate the way this looks :(
+            File.Create("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
 
-        //    string[] AdminIdConfig = File.ReadAllLines("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
-        //    for (int i = 1; i < AdminIdConfig.Length; i++)
-        //    {
-        //        AdminIdConfig[i] = AdminIdConfig[i].Remove(0, 15);
-        //    }
+            string[] AdminIdConfig = File.ReadAllLines("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini");
+            for ( int i = 0; i < AdminIdConfig.Length; i++ )
+            {
+                if (!AdminIdConfig[i].StartsWith("Administrators="))
+                {
+                    continue;
+                }
+
+                if (AdminIDTextBox.Text == "")
+                {
+                    AdminIDTextBox.Text = AdminIdConfig[i].Remove(0, 15);
+                }
+                else
+                {
+                    string newId = AdminIdConfig[i].Remove(0, 15).Insert(0, ", ");
+                    AdminIDTextBox.Text.Insert(AdminIDTextBox.TextLength, newId);
+                }
+            }
         }
 
         private void StartServerButton_Click(object sender, EventArgs e)
@@ -40,6 +53,8 @@ namespace WildOmissionServerConfigurator
             // Write to that file
             Directory.CreateDirectory("WildOmission/Saved/Config/WindowsServer/");
             File.WriteAllLines("WildOmission/Saved/Config/WindowsServer/ServerAdministrators.ini", AdministratorConfigLines);
+
+            // TODO write servername and port to config file
 
             // Launch server executable with correct launch options
             String LaunchArgumentsString = String.Format("-log -SteamServerName=\"{0}\" -Port={1}", ServerNameTextBox.Text, PortTextBox.Text);
